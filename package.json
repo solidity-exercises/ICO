@@ -1,0 +1,22 @@
+{
+  "name": "ico",
+  "version": "1.0.0",
+  "description": "ICO exercise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidity-exercises/ICO.git"
+  },
+  "author": "Stefan Arnaudov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/solidity-exercises/ICO/issues"
+  },
+  "homepage": "https://github.com/solidity-exercises/ICO#readme",
+  "dependencies": {
+    "zeppelin-solidity": "1.8.0"
+  }
+}
