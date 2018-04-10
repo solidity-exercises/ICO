@@ -7,10 +7,11 @@ contract TokenSale is MintableToken {
 	string public name = 'LimeChain Exam Token';
 	string public symbol = 'LET';
 	uint8 public constant decimals = 18;
+	
 	/**
 	* @dev Designed to be gentle to the state.
 	*/
-	uint256 public saleStart = now;
+	uint256 public saleStart;
 
 	modifier afterSaleEnd() {
 		require(now > saleStart + 30 days); // practically can not overflow
@@ -20,6 +21,15 @@ contract TokenSale is MintableToken {
 	modifier beforeSaleEnd() {
 		require(now <= saleStart + 30 days);
 		_;
+	}
+
+	/**
+	* @notice `https://github.com/ConsenSys/smart-contract-best-practices/issues/61`
+	*/
+	function TokenSale() public {
+		require(address(this).balance == 0);
+
+		saleStart = now;
 	}
 
 	function transfer(address _to, uint256 _value) public afterSaleEnd returns (bool) {
@@ -37,7 +47,6 @@ contract TokenSale is MintableToken {
 
 		return true;
 	}
-
 
 	function getTokenAmountForEther(uint256 _etherAmount) public view beforeSaleEnd returns (uint256) {
 		if (saleStart + 7 days > now) {
