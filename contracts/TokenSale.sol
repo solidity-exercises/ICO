@@ -42,7 +42,7 @@ contract TokenSale is MintableToken {
 
 	function buy() public payable beforeSaleEnd returns (bool) {
 		uint256 amount = getTokenAmountForEther(msg.value);
-		
+
 		assert(_saleTransfer(msg.sender, amount));
 
 		return true;
@@ -54,7 +54,7 @@ contract TokenSale is MintableToken {
 				return _calculateTokenAmount(_etherAmount, 500e18); // First phase, less than or equal to 10ETH.
 			}
 
-			if (address(this).balance >= 10 ether) {
+			if (address(this).balance - _etherAmount >= 10 ether) {
 				return _calculateTokenAmount(_etherAmount, 300e18); // First phase, greater than or equal to  10ETH.
 			}
 
@@ -63,8 +63,8 @@ contract TokenSale is MintableToken {
 			* the balance from less to greater than 10 ETH.
 			* @notice The split calculations can not underflow.
 			*/
-			uint256 underSplit = 10 ether - address(this).balance;
-			uint256 overSplit = _etherAmount - underSplit;
+			uint256 overSplit = address(this).balance - 10 ether;
+			uint256 underSplit = _etherAmount - overSplit;
 
 			return _calculateTokenAmount(underSplit, 500e18).add(_calculateTokenAmount(overSplit, 300e18));
 		} else if (saleStart + 7 days <= now && saleStart + 15 days > now) {
@@ -72,7 +72,7 @@ contract TokenSale is MintableToken {
 				return _calculateTokenAmount(_etherAmount, 200e18); // Second phase, less than or equal to 30ETH.
 			}
 
-			if (address(this).balance >= 30 ether) {
+			if (address(this).balance - _etherAmount >= 30 ether) {
 				return _calculateTokenAmount(_etherAmount, 150e18); // Second phase, greater than or equal to 30ETH.
 			}
 
@@ -81,8 +81,8 @@ contract TokenSale is MintableToken {
 			* the balance from less to greater than 30 ETH.
 			* @notice The split calculations can not underflow.
 			*/
-			uint256 secondPhaseUnderSplit = 30 ether - address(this).balance;
-			uint256 secondPhaseOverSplit = _etherAmount - secondPhaseUnderSplit;
+			uint256 secondPhaseOverSplit = address(this).balance - 30 ether;
+			uint256 secondPhaseUnderSplit = _etherAmount - secondPhaseOverSplit;
 
 			return _calculateTokenAmount(secondPhaseUnderSplit, 200e18).add(_calculateTokenAmount(secondPhaseOverSplit, 150e18));
 		} else {
@@ -103,6 +103,6 @@ contract TokenSale is MintableToken {
 	}
 
 	function _calculateTokenAmount(uint256 _etherAmount, uint256 _tokenPrice) private pure returns (uint256) {
-		return _etherAmount.mul(1 ether).div(_tokenPrice);
+		return _etherAmount.mul(_tokenPrice).div(1 ether);
 	}
 }
