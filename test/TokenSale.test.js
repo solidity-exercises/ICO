@@ -219,6 +219,14 @@ contract('TokenSale', ([owner, other]) => {
 		assert(logs[0].args.value.eq(500e18));
 	});
 
+	it('buy Should revert when the contract has not got enough token balance', async () => {
+		// Arrange
+		// Act
+		const result = sut.buy({ value: 1e18 });
+		// Assert
+		await assertRevert(result);
+	});
+
 	it('buy Should revert when invoked after the token sale end', async () => {
 		// Arrange
 		await sut.mint(sut.address, 500e18);

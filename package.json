@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/solidity-exercises/ICO#readme",
   "dependencies": {
+    "solidity-coverage": "^0.4.15",
     "zeppelin-solidity": "1.8.0"
   }
 }
