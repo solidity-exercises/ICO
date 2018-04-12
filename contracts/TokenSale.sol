@@ -50,7 +50,7 @@ contract TokenSale is MintableToken {
 
 	function getTokenAmountForEther(uint256 _etherAmount) public view beforeSaleEnd returns (uint256) {
 		if (saleStart + 7 days > now) {
-			if (address(this).balance.add(_etherAmount) <= 10 ether) {
+			if (address(this).balance <= 10 ether) {
 				return _calculateTokenAmount(_etherAmount, 500e18); // First phase, less than or equal to 10ETH.
 			}
 
@@ -68,7 +68,7 @@ contract TokenSale is MintableToken {
 
 			return _calculateTokenAmount(underSplit, 500e18).add(_calculateTokenAmount(overSplit, 300e18));
 		} else if (saleStart + 7 days <= now && saleStart + 15 days > now) {
-			if (address(this).balance.add(_etherAmount) <= 30 ether) {
+			if (address(this).balance <= 30 ether) {
 				return _calculateTokenAmount(_etherAmount, 200e18); // Second phase, less than or equal to 30ETH.
 			}
 
